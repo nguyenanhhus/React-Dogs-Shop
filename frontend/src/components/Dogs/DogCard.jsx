@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./dog.css";
+import CartContext from "../../Contexts/CartContext";
 
 DogCard.propTypes = {};
 
 function DogCard(props) {
   const { dog } = props;
   const [isAdded, setAdded] = useState(false);
+  const { addToCart, setTotal } = useContext(CartContext);
 
   const handleClick = () => {
     setAdded(true);
+
+    //Add to cart
+    const newItem = {
+      id: dog.id,
+      name: dog.name,
+      price: dog.price,
+      imageUrl: dog.imageUrl,
+    };
+
+    addToCart((item) => [...item, newItem]);
+
+    //Update total price
+    setTotal((preTotal) => preTotal + Number(dog.price));
   };
 
   return (

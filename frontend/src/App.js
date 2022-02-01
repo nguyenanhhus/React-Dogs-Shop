@@ -6,9 +6,12 @@ import Cart from "./components/Cart/Cart";
 import NavBar from "./components/NavBar/NavBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CartContext from "./Contexts/CartContext";
 
 function App() {
   const [allDogs, setAllDogs] = useState([]);
+  const [cart, addToCart] = useState([{}]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -25,21 +28,23 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Router>
-        <NavBar />
-        <div className="page-container">
-          <Routes>
-            <Route path="/" element={<Home />}></Route>
-            <Route
-              path="/dogs"
-              element={<DogsPage allDogs={allDogs} />}
-            ></Route>
-            <Route path="/checkout" element={<Cart />}></Route>
-          </Routes>
-        </div>
-      </Router>
-    </div>
+    <CartContext.Provider value={{ cart, addToCart, total, setTotal }}>
+      <div className="App">
+        <Router>
+          <NavBar />
+          <div className="page-container">
+            <Routes>
+              <Route path="/" element={<Home />}></Route>
+              <Route
+                path="/dogs"
+                element={<DogsPage allDogs={allDogs} />}
+              ></Route>
+              <Route path="/checkout" element={<Cart />}></Route>
+            </Routes>
+          </div>
+        </Router>
+      </div>
+    </CartContext.Provider>
   );
 }
 
